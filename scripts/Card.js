@@ -10,15 +10,6 @@ class Card {
         this._basketElement = null;
     }
 
-    // _openBigImage() {
-    //     const popupImage = document.querySelector('.popup_type_image');
-    //     const bigImage = document.querySelector('.popup__image');
-    //     this._openPopup(popupImage);
-    //     popupImageSubtitle.textContent = this._name;
-    //     bigImage.src = this._link;
-    //     bigImage.alt = this._alt;
-    // }
-
     _handlerLikeClick(evt) {
         const eventTarget = evt.target;
         eventTarget.classList.toggle('element__like_active');
