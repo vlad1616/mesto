@@ -1,0 +1,17 @@
+.popup_form_image {
+    display: none;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+@media screen and (max-width:999px) {
+    .popup_form_image {
+        align-items: flex-start;
+    }
+}
