@@ -1,5 +1,11 @@
 import { Card } from './Card.js'
 import { FormValidator } from './FormValidator.js';
+const validationConfig = {
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__button-save',
+  inactiveButtonClass: 'popup__button-save_disabled',
+  inputErrorClass: 'popup__input-error',
+};
 const profilePopup = document.querySelector('.popup_profile_add');
 const editButton = document.querySelector('.profile__button');
 const profileCloseButton = document.querySelector('.popup__close-button');
@@ -7,7 +13,7 @@ const profileName = document.querySelector('.profile__title');
 const profileJob = document.querySelector('.profile__subtitle');
 const nameInput = document.querySelector('.popup__input_value_form');
 const jobInput = document.querySelector('.popup__input_value_job');
-const profileForm = document.querySelector('.popup__form');
+const profileForm = document.querySelector('.popup__form_editing');
 const addingFormElement = document.querySelector('.popup__form_add');
 const addingPopup = document.querySelector('.popup_form_add');
 const addingButton = document.querySelector('.profile__add-button');
@@ -19,7 +25,8 @@ const popupImage = document.querySelector('.popup__image');
 const popupWithImageSubtitle = document.querySelector('.popup__subtitle');
 const popupWithImageClose = document.querySelector('.popup__close-button_type_image');
 const popups = Array.from(document.querySelectorAll('.popup'));
-
+const editingProfileFormValidator = new FormValidator(validationConfig, profileForm);
+const addingCardFormValidator = new FormValidator(validationConfig, addingFormElement);
 // Функия открытия попапа
 function openPopup(popupElement) {
   popupElement.classList.add('popup_opened');
@@ -28,13 +35,15 @@ function openPopup(popupElement) {
 function openPopupForEditing(nameElement, jobElement, popupElement) {
   nameElement.value = profileName.textContent;
   jobElement.value = profileJob.textContent;
+  editingProfileFormValidator.disableButton();
   openPopup(popupElement);
 }
 
 function openPopupForAdding(nameElement, linkElement, popupElement) {
   nameElement.value = "";
   linkElement.value = "";
-  openPopup(popupElement)
+  addingCardFormValidator.disableButton();
+  openPopup(popupElement);
 }
 // Функция открытия попапа с картинкой
 function handleOpenPopup(name, link) {
@@ -53,8 +62,10 @@ function closePopup(popupElement) {
 };
 
 const closePopupByClickingOnEscape = (e) => {
-  const popup = document.querySelector('.popup_opened');
-  if (e.key === 'Escape') closePopup(popup)
+  if (e.key === 'Escape') {
+    const popup = document.querySelector('.popup_opened');
+    closePopup(popup);
+  }
 }
 
 profileCloseButton.addEventListener('click', () => closePopup(profilePopup));
@@ -71,6 +82,7 @@ function handleProfileFormSubmit(evt) {
 profileForm.addEventListener('submit', handleProfileFormSubmit);
 
 const listOfElements = document.querySelector('.element');
+
 function createCard(card) {
   const newCard = new Card(card, '#elementTemplate', handleOpenPopup);
   return newCard.generateCard()
@@ -90,20 +102,11 @@ function handleAddingFormSubmit(evt) {
   }
   addNewCard(card);
   closePopup(addingPopup);
-  evt.target.reset();
 }
 
 const closePopupByClickingOnOverlay = (e) => {
   if (e.target !== e.currentTarget) return;
   closePopup(e.currentTarget);
-};
-
-const validationConfig = {
-  formSelector: '.popup__form',
-  inputSelector: '.popup__input',
-  submitButtonSelector: '.popup__button-save',
-  inactiveButtonClass: 'popup__button-save_disabled',
-  inputErrorClass: 'popup__input-error',
 };
 
 const initialCards = [
@@ -133,14 +136,11 @@ const initialCards = [
   }
 ];
 
-const enableValidationForms = ({ formSelector, ...rest }) => {
-  const forms = Array.from(document.querySelectorAll(formSelector));
-  forms.forEach(form => {
-    const formValidator = new FormValidator(rest, form);
-    formValidator.enableValidation();
-  });
+const enableValidationForms = () => {
+  editingProfileFormValidator.enableValidation();
+  addingCardFormValidator.enableValidation();
 }
 popups.forEach((popup) => popup.addEventListener('click', closePopupByClickingOnOverlay));
-enableValidationForms(validationConfig);
+enableValidationForms();
 addingFormElement.addEventListener('submit', (evt) => handleAddingFormSubmit(evt));
 initialCards.forEach(addNewCard);

@@ -10,9 +10,8 @@ class Card {
         this._basketElement = null;
     }
 
-    _handlerLikeClick(evt) {
-        const eventTarget = evt.target;
-        eventTarget.classList.toggle('element__like_active');
+    _handlerLikeClick() {
+        this._likeElement.classList.toggle('element__like_active');
     }
 
     _handlerBasketClick() {
@@ -21,7 +20,7 @@ class Card {
     }
 
     _setEventListeners() {
-        this._likeElement.addEventListener('click', (evt) => this._handlerLikeClick(evt));
+        this._likeElement.addEventListener('click', () => this._handlerLikeClick());
         this._basketElement.addEventListener('click', () => this._handlerBasketClick());
         this._elementCardFhoto.addEventListener('click', () => this._handlerOpenPopup(this._name, this._link));
     }
