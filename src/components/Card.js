@@ -1,5 +1,6 @@
 class Card {
     constructor(item, templateSelector, handlerOpenPopup) {
+        console.log(item)
         this._name = item.name;
         this._link = item.link;
         this._template = templateSelector;
